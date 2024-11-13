@@ -1,7 +1,7 @@
 package models
 
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -18,7 +18,6 @@ case class Visitor(
                   )
 
 object Visitor {
-  // Combine all the reads
   implicit val visitorReads: Reads[Visitor] = (
     (JsPath \ "visitorId").readNullable[Long] and
       (JsPath \ "name").read[String] and

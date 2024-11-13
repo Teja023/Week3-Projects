@@ -15,6 +15,12 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "8.0.26"
 )
 
+libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.2"
+
+libraryDependencies += "org.apache.kafka" % "kafka-clients" % "3.4.0" // Add the correct version of Kafka client
+
+
+
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "com.example.controllers._"
 

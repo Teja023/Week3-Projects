@@ -17,8 +17,9 @@ class VisitorController @Inject()(
   def checkInVisitor(): Action[JsValue] = Action.async(parse.json) { request =>
     request.body.validate[Visitor] match {
       case JsSuccess(visitor, _) =>
-        visitorService.checkIn(visitor).map(created =>
-          Created(Json.toJson(created)))
+        visitorService.checkIn(visitor).map { created =>
+          Created(Json.toJson(created))
+        }
       case JsError(errors) =>
         Future.successful(BadRequest(Json.obj(
           "message" -> "Invalid visitor data",
