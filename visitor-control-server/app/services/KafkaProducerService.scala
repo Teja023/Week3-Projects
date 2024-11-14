@@ -1,10 +1,11 @@
 package services
 
 import models.Visitor
-import javax.inject._
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
-import java.util.Properties
 import play.api.libs.json._
+
+import java.util.Properties
+import javax.inject._
 
 @Singleton
 class KafkaProducerService @Inject()() {

@@ -1,13 +1,12 @@
 package controllers
 
-import models.Visitor
-import models.VisitorIdentityProof
+import models.{Visitor, VisitorIdentityProof}
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc._
-import services.VisitorService
-import services.EmployeeService
 import play.api.libs.json._
+import play.api.mvc._
+import services.{EmployeeService, VisitorService}
 import utils.Validation
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -1,12 +1,11 @@
 package services
 
-import javax.inject._
-import models.Visitor
-import models.VisitorIdentityProof
+import models.{Visitor, VisitorIdentityProof}
 import repositories.{VisitorIdentityProofRepository, VisitorRepository}
 
-import scala.concurrent.Future
+import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @Singleton
 class VisitorService @Inject()(VisitorRepository: VisitorRepository,

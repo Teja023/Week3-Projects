@@ -1,9 +1,10 @@
 package controllers
 
 import models.Employee
+import play.api.libs.json._
 import play.api.mvc._
 import services.EmployeeService
-import play.api.libs.json._
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 

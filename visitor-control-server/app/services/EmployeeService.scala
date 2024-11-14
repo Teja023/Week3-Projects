@@ -1,11 +1,10 @@
 package services
 
-import javax.inject._
 import models.Employee
 import repositories.EmployeeRepository
 
+import javax.inject._
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class EmployeeService @Inject()(employeeRepository: EmployeeRepository) {

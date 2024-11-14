@@ -1,13 +1,14 @@
 package repositories
 
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
-import play.api.db.slick.DatabaseConfigProvider
-import slick.jdbc.JdbcProfile
 import models.Visitor
 import models.db.VisitorTable
+import play.api.db.slick.DatabaseConfigProvider
+import slick.jdbc.JdbcProfile
+
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class VisitorRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
