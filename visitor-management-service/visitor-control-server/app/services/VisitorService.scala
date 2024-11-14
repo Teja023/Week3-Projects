@@ -17,12 +17,16 @@ class VisitorService @Inject()(VisitorRepository: VisitorRepository,
 
   def checkIn(visitorData: Visitor): Future[Long] = {
     val persistedVisitorFuture: Future[Long] = VisitorRepository.create(visitorData)
-    // Then, asynchronously send the visitor data to Kafka after persistence
-    persistedVisitorFuture.map { visitorId =>
-      // Send the visitor data to Kafka
-      KafkaProducerService.sendToKafka(visitorData)
 
-      // Return the ID from the persistence operation (you can use it as needed)
+    // Map over the Future result to send visitor data along with visitorId to Kafka
+    persistedVisitorFuture.map { visitorId =>
+      // Create a composite object or map containing both the visitorId and visitorData
+      val kafkaVisitorData = visitorData.copy(visitorId = Some(visitorId))
+
+      // Send the enriched visitor data to Kafka
+      KafkaProducerService.sendToKafka(kafkaVisitorData)
+
+      // Return the ID from the persistence operation
       visitorId
     }
   }
