@@ -88,7 +88,19 @@ class VisitorController @Inject()(
     }
   }
 
+  def approve(visitorId: Long): Action[AnyContent] = Action.async {
+    visitorService.approve(visitorId).map {
+      case true => Ok("Visitor Approved.")
+      case false => InternalServerError("Failed to approve the visitor.")
+    }
+  }
 
+  def reject(visitorId: Long): Action[AnyContent] = Action.async {
+    visitorService.reject(visitorId).map {
+      case true => Ok("Visitor rejected.")
+      case false => InternalServerError("Failed to reject the visitor.")
+    }
+  }
 
   def checkOutVisitor(visitorId: Long): Action[AnyContent] = Action.async {
     visitorService.checkOut(visitorId).map {

@@ -5,6 +5,8 @@
 POST    /api/visitor/checkin                controllers.VisitorController.checkInVisitor()
 POST    /api/visitor/checkout/:id           controllers.VisitorController.checkOutVisitor(id: Long)
 GET     /api/visitor/:id                    controllers.VisitorController.getVisitorDetails(id: Long)
+GET     /api/visitor-approval/approve/:id       controllers.VisitorController.approve(id: Long)
+GET     /api/visitor-approval/reject/:id        controllers.VisitorController.reject(id: Long)
 GET     /api/visitors                       controllers.VisitorController.list()
 
 # Employee Routes

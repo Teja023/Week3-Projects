@@ -31,7 +31,38 @@ class VisitorService @Inject()(VisitorRepository: VisitorRepository,
     visitorIdentityProofRepository.create(visitorIdentityData)
   }
 
-  def checkOut(visitorId: Long): Future[Boolean] = VisitorRepository.updateCheckOut(visitorId)
+  def checkOut(visitorId: Long): Future[Boolean] = {
+    VisitorRepository.updateCheckOut(visitorId).flatMap {
+      case Some(visitor) =>
+        // Push the updated visitor to Kafka
+        KafkaProducerService.sendToKafka(visitor)
+        Future.successful(true)
+      case None =>
+        Future.successful(false)
+    }
+  }
+
+  def approve(visitorId: Long): Future[Boolean] = {
+    VisitorRepository.updateVisitorStatus(visitorId, "Approved").flatMap {
+      case Some(visitor) =>
+        // Push the updated visitor to Kafka
+        KafkaProducerService.sendToKafka(visitor)
+        Future.successful(true)
+      case None =>
+        Future.successful(false)
+    }
+  }
+
+  def reject(visitorId: Long): Future[Boolean] = {
+    VisitorRepository.updateVisitorStatus(visitorId, "Rejected").flatMap {
+      case Some(visitor) =>
+        // Push the updated visitor to Kafka
+        KafkaProducerService.sendToKafka(visitor)
+        Future.successful(true)
+      case None =>
+        Future.successful(false)
+    }
+  }
 
   def list(): Future[Seq[Visitor]] = VisitorRepository.list()
 

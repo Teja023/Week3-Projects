@@ -40,7 +40,17 @@ class VisitorRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
 
   def getById(id: Long): Future[Option[Visitor]] = db.run(visitors.filter(_.visitorId === id).result.headOption)
 
-  def updateCheckOut(visitorId: Long): Future[Boolean] = {
+  // Update the status of a visitor
+  def updateVisitorStatus(visitorId: Long, newStatus: String): Future[Option[Visitor]] = {
+    val query = visitors.filter(_.visitorId === visitorId).map(_.status).update(newStatus)
+
+    db.run(query).flatMap { _ =>
+      // After updating, fetch the updated visitor to return it
+      db.run(visitors.filter(_.visitorId === visitorId).result.headOption)
+    }
+  }
+
+  def updateCheckOut(visitorId: Long): Future[Option[Visitor]] = {
     val currentTime = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)  // Current time for checkOutTime
     val defaultStatus = "Checked Out"  // Default status
 
@@ -51,8 +61,10 @@ class VisitorRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
 
     // Execute the update and handle the result
     db.run(updateQuery).flatMap {
-      case 0 => Future.successful(false)  // No rows updated, return false
-      case _ => Future.successful(true)   // Visitor updated, return true
+      case 0 => Future.successful(None)  // No rows updated, return None
+      case _ =>
+        // After updating, fetch the updated visitor to return it
+        db.run(visitors.filter(_.visitorId === visitorId).result.headOption)
     }
   }
 }

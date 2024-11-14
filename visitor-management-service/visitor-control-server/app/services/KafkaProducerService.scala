@@ -22,7 +22,7 @@ class KafkaProducerService @Inject()() {
     val jsonMessage: String = Json.stringify(Json.toJson(visitor))
 
     // Send the message to Kafka
-    val record = new ProducerRecord[String, String]("visitor-checkin-topic", "key", jsonMessage)
+    val record = new ProducerRecord[String, String]("visitor-topic", "key", jsonMessage)
     producer.send(record)
   }
 }
