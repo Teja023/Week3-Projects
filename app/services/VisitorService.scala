@@ -2,21 +2,22 @@ package services
 
 import javax.inject._
 import models.Visitor
-import repositories.VisitorRepository
-import services.KafkaProducerService
-import scala.concurrent.ExecutionContext.Implicits.global
+import models.VisitorIdentityProof
+import repositories.{VisitorIdentityProofRepository, VisitorRepository}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class VisitorService @Inject()(VisitorRepository: VisitorRepository, KafkaProducerService: KafkaProducerService) {
+class VisitorService @Inject()(VisitorRepository: VisitorRepository,
+                               visitorIdentityProofRepository: VisitorIdentityProofRepository,
+                               KafkaProducerService: KafkaProducerService
+) {
 
   private var visitors: List[Visitor] = List()
 
   def checkIn(visitorData: Visitor): Future[Long] = {
     val persistedVisitorFuture: Future[Long] = VisitorRepository.create(visitorData)
-
     // Then, asynchronously send the visitor data to Kafka after persistence
     persistedVisitorFuture.map { visitorId =>
       // Send the visitor data to Kafka
@@ -25,6 +26,10 @@ class VisitorService @Inject()(VisitorRepository: VisitorRepository, KafkaProduc
       // Return the ID from the persistence operation (you can use it as needed)
       visitorId
     }
+  }
+
+  def addVisitorIdentity(visitorIdentityData: VisitorIdentityProof): Future[Long] = {
+    visitorIdentityProofRepository.create(visitorIdentityData)
   }
 
   def checkOut(visitorId: Long): Future[Boolean] = VisitorRepository.updateCheckOut(visitorId)

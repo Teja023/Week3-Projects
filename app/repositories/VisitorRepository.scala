@@ -19,13 +19,14 @@ class VisitorRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
 
   def create(visitor: Visitor): Future[Long] = {
     val insertQueryThenReturnId = visitors
-      .map(v => (v.name, v.hostName, v.building, v.email, v.contactNumber, v.checkInTime, v.status))
+      .map(v => (v.name, v.hostName, v.hostMail, v.building, v.email, v.contactNumber, v.checkInTime, v.status))
       .returning(visitors.map(_.visitorId))  // Ensure this returns a Long value
 
     // Execute the query and return the inserted visitor's ID
     db.run(insertQueryThenReturnId += (
       visitor.name,
       visitor.hostName,
+      visitor.hostMail,
       visitor.building,
       visitor.email,
       visitor.contactNumber,
